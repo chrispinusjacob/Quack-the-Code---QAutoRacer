@@ -14,6 +14,11 @@ QAutoRacer is a racing game inspired by classic arcade racers with a modern synt
 - Obstacle avoidance gameplay with increasing difficulty
 - Score tracking and speedometer
 - Educational insights into classic game development techniques
+- Advanced features:
+  - Dynamic track generation with varying complexity
+  - Adaptive difficulty that adjusts to player skill
+  - Dynamic commentary based on gameplay events
+  - Multiple visual themes (synthwave, retrowave, cyberpunk)
 
 ## Educational Value
 
@@ -23,6 +28,7 @@ This game demonstrates several important game development concepts:
 - **Game Physics**: Simple but effective physics for car handling, including acceleration, deceleration, and centrifugal force on curves.
 - **Collision Detection**: Basic collision detection between the player's car and obstacles.
 - **Game State Management**: The game demonstrates proper state management (title screen, playing, game over).
+- **Adaptive Difficulty**: The game analyzes player performance and adjusts difficulty accordingly.
 
 ## Controls
 
@@ -36,8 +42,8 @@ This game demonstrates several important game development concepts:
 ## Requirements
 
 - Python 3.6+
-- Pygame 2.5.2
-- NumPy 1.26.0
+- Pygame 2.5.2+
+- NumPy 1.26.0+
 
 ## Installation
 
@@ -50,6 +56,8 @@ This game demonstrates several important game development concepts:
    ```
    python main.py
    ```
+   
+   Or simply double-click the `run_game.bat` file (Windows)
 
 ## How to Play
 
@@ -62,11 +70,9 @@ The game uses the following sound effects:
 - Crash sound
 - Score milestone sound
 
-Note: Sound files need to be placed in the `assets` directory. If sound files are missing, the game will run without sound.
-
 ## Development Process
 
-This game was created with the assistance of Amazon Q Developer, demonstrating how AI can help in game development. The development process included:
+This game was created as part of the "That's Entertainment!" challenge. The development process included:
 
 1. Setting up the basic game structure and pseudo-3D rendering
 2. Implementing car physics and controls
@@ -74,11 +80,12 @@ This game was created with the assistance of Amazon Q Developer, demonstrating h
 4. Adding obstacles and collision detection
 5. Designing the synthwave visual aesthetic
 6. Implementing game states (title, playing, game over)
-7. Adding sound effects and educational elements
+7. Adding advanced features like adaptive difficulty and dynamic commentary
+8. Adding sound effects and educational elements
 
 ## Credits
 
-Created with Amazon Q Developer as part of the "That's Entertainment!" challenge.
+Created as part of the "That's Entertainment!" challenge.
 
 ## License
 

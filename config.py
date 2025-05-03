@@ -10,7 +10,7 @@ SEGMENT_LENGTH = 200
 RUMBLE_LENGTH = 3
 LANES = 3
 
-# Advanced configuration
+# Game configuration
 CONFIG = {
     "difficulty_scaling": 0.0001,  # How quickly the game gets harder
     "max_obstacles": 30,           # Maximum obstacles on screen
@@ -23,13 +23,12 @@ CONFIG = {
     "night_mode": False,           # Night mode toggle
     "debug_mode": False,           # Debug information toggle
     
-    # AI-enhanced features
-    "ai_track_generation": True,   # Use AI to generate track patterns
+    # Game features
+    "track_generation": True,      # Use procedural track generation
     "adaptive_difficulty": True,   # Adjust difficulty based on player performance
-    "dynamic_commentary": True,    # Enable AI commentary during gameplay
-    "dynamic_music": False,        # Enable AI-selected music based on gameplay
+    "dynamic_commentary": True,    # Enable dynamic commentary during gameplay
     
-    # AI track generation parameters
+    # Track generation parameters
     "track_complexity": 0.5,       # 0.0 (simple) to 1.0 (complex)
     "track_creativity": 0.7,       # 0.0 (standard) to 1.0 (experimental)
     "track_theme": "synthwave",    # Visual theme for track generation
@@ -54,7 +53,7 @@ NEON_GREEN = (57, 255, 20)
 NEON_PURPLE = (138, 43, 226)
 NEON_YELLOW = (255, 255, 0)
 NEON_ORANGE = (255, 165, 0)
-NEON_RED = (255, 0, 0)  # Added for completeness
+NEON_RED = (255, 0, 0)
 
 # Color schemes
 COLOR_SCHEMES = {
@@ -114,27 +113,11 @@ STATE_PLAYING = 1
 STATE_GAME_OVER = 2
 
 # Asset paths
-ASSET_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "assets")
+ASSET_DIR = os.path.join(os.path.dirname(__file__), "assets")
 SOUND_DIR = os.path.join(ASSET_DIR, "sounds")
 
 # Create directories if they don't exist
 os.makedirs(SOUND_DIR, exist_ok=True)
-
-# Initialize pygame
-pygame.mixer.pre_init(44100, -16, 2, 2048)  # Setup for less sound lag
-pygame.init()
-pygame.mixer.init()
-pygame.font.init()
-
-# Set up the display with more options
-flags = pygame.HWSURFACE | pygame.DOUBLEBUF
-screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT), flags)
-pygame.display.set_caption("QAutoRacer - Synthwave Edition")
-icon = pygame.Surface((32, 32))
-icon.fill(NEON_PINK)
-pygame.draw.rect(icon, NEON_BLUE, (8, 8, 16, 16))
-pygame.display.set_icon(icon)
-clock = pygame.time.Clock()
 
 # Global variables
 high_score = 0
@@ -144,4 +127,4 @@ def get_color_scheme():
     """Get current color scheme based on settings"""
     if CONFIG["night_mode"]:
         return COLOR_SCHEMES["night"]
-    return COLOR_SCHEMES["synthwave"]
+    return COLOR_SCHEMES[CONFIG["track_theme"]]

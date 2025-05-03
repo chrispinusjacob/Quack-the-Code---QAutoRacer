@@ -960,13 +960,14 @@ class Obstacle:
             ]
             pygame.draw.polygon(screen, stripe_color, stripe_points2)
 
-# Import AI integration
+# Import game features
 try:
-    from amazon_q_integration import AITrackGenerator, AdaptiveDifficulty, AICommentator, AmazonQIntegration
-    ai_available = True
-except ImportError:
-    print("AI integration not available. Running in standard mode.")
-    ai_available = False
+    from track_generator import generate_track, suggest_color_scheme
+    from game_features import AdaptiveDifficulty, DynamicCommentator, draw_comment
+    advanced_features_available = True
+except ImportError as e:
+    print(f"Advanced features not available: {e}. Running in standard mode.")
+    advanced_features_available = False
 
 # Game objects
 game_state = GameState()
@@ -976,14 +977,12 @@ power_ups = []
 last_obstacle_pos = 0
 last_powerup_pos = 0
 
-# Initialize AI components if available
-if ai_available and CONFIG["ai_track_generation"]:
-    ai_track_generator = AITrackGenerator()
+# Initialize game features if available
+if advanced_features_available and CONFIG["track_generation"]:
     if CONFIG["adaptive_difficulty"]:
         adaptive_difficulty = AdaptiveDifficulty()
     if CONFIG["dynamic_commentary"]:
-        ai_commentator = AICommentator()
-    aws_integration = AWSIntegration()
+        commentator = DynamicCommentator()
 
 # Game effects
 screen_shake = 0
@@ -1796,13 +1795,13 @@ def draw_title_screen():
 
 # Sound effects
 try:
-    engine_sound = pygame.mixer.Sound("assets/engine.wav")
-    crash_sound = pygame.mixer.Sound("assets/crash.wav")
-    score_sound = pygame.mixer.Sound("assets/score.wav")
+    engine_sound = pygame.mixer.Sound("assets/sounds/engine.mp3")
+    crash_sound = pygame.mixer.Sound("assets/sounds/crash.mp3")
+    score_sound = pygame.mixer.Sound("assets/sounds/score.mp3")
     has_sound = True
-except:
+except Exception as e:
     has_sound = False
-    print("Sound files not found. Continuing without sound.")
+    print(f"Sound files not found: {e}. Continuing without sound.")
 
 # Game states
 STATE_TITLE = 0
@@ -1811,41 +1810,23 @@ STATE_GAME_OVER = 2
 
 # Main game loop
 def main():
-    global obstacles, last_obstacle_pos, ai_track_generator, adaptive_difficulty, ai_commentator
+    global obstacles, last_obstacle_pos, adaptive_difficulty, commentator
     
     game_state = GameState()
     player_car = Car()
     obstacles = []
     last_obstacle_pos = 0
     
-    # Initialize AI components if available
-    if ai_available:
-        # Check if AWS Builder ID is configured
-        amazon_q = AmazonQIntegration()
-        builder_id_configured = amazon_q.is_configured
-        
-        if not builder_id_configured:
-            print("AWS Builder ID not configured. AI features will be limited.")
-            # Show setup dialog on first run
-            try:
-                from aws_builder_setup import BuilderIDSetupWindow
-                import tkinter as tk
-                root = tk.Tk()
-                root.withdraw()  # Hide the main window
-                setup_window = BuilderIDSetupWindow(root)
-                root.mainloop()
-                # Check if setup was completed
-                amazon_q = AmazonQIntegration()  # Reload config
-                builder_id_configured = amazon_q.is_configured
-            except Exception as e:
-                print(f"Could not show Builder ID setup window: {e}")
-        
-        if CONFIG["ai_track_generation"]:
-            ai_track_generator = AITrackGenerator()
-            # Use AI to generate the track if enabled
+    # Initialize game features if available
+    if advanced_features_available:
+        if CONFIG["track_generation"]:
+            # Use advanced algorithm to generate the track
             if hasattr(game_state, 'generate_track'):
-                print("Using AI to generate track...")
-                track_data = ai_track_generator.generate_track(10000, 0.5)
+                print("Using advanced algorithm to generate track...")
+                track_data = generate_track(
+                    length=10000, 
+                    player_skill=0.5
+                )
                 game_state.track_curvature = track_data["track_curvature"]
                 game_state.hills = track_data["hills"]
                 game_state.track_width = track_data["track_width"]
@@ -1855,7 +1836,7 @@ def main():
             adaptive_difficulty = AdaptiveDifficulty()
             
         if CONFIG["dynamic_commentary"]:
-            ai_commentator = AICommentator()
+            commentator = DynamicCommentator()
     
     # Generate initial obstacles
     for i in range(10):
@@ -1973,22 +1954,43 @@ def main():
             if has_sound:
                 engine_sound.set_volume(game_state.speed / game_state.max_speed * 0.7)
             
+            # Update game features
+            dt = clock.get_time()  # Get delta time since last frame
+            comment = None
+            
+            # Update adaptive difficulty if enabled
+            if CONFIG["adaptive_difficulty"] and 'adaptive_difficulty' in globals():
+                adaptive_difficulty.update_metrics(game_state, dt)
+                difficulty_changes = adaptive_difficulty.adjust_difficulty(pygame.time.get_ticks())
+                if difficulty_changes:
+                    if "max_obstacles" in difficulty_changes:
+                        CONFIG["max_obstacles"] = difficulty_changes["max_obstacles"]
+                    if "track_complexity" in difficulty_changes:
+                        CONFIG["track_complexity"] = difficulty_changes["track_complexity"]
+            
+            # Get dynamic commentary if enabled
+            if CONFIG["dynamic_commentary"] and 'commentator' in globals():
+                comment = commentator.update(game_state, dt)
+            
             # Draw everything
             segment = int(game_state.position / SEGMENT_LENGTH) % len(game_state.track_curvature)
-            dt = clock.get_time()  # Get delta time since last frame
             draw_road(game_state.position, game_state.player_x, game_state.track_curvature[segment], game_state.hills[segment], dt)
             player_car.draw(0, 0, game_state.speed / game_state.max_speed)
             draw_hud(game_state.speed, game_state.score)
+            
+            # Draw commentary if available
+            if comment:
+                draw_comment(screen, comment)
             
             # Educational info
             font = pygame.font.SysFont("Arial", 16)
             edu_text = font.render(f"Pseudo-3D Technique: {len(obstacles)} obstacles, {int(game_state.position / SEGMENT_LENGTH)} segments", True, NEON_GREEN)
             screen.blit(edu_text, (20, SCREEN_HEIGHT - 30))
             
-            # Show AI status if enabled
-            if ai_available:
-                ai_text = font.render(f"AI Features: {'Enabled' if CONFIG['ai_track_generation'] else 'Disabled'}", True, NEON_BLUE)
-                screen.blit(ai_text, (20, SCREEN_HEIGHT - 50))
+            # Show advanced features status
+            if advanced_features_available:
+                features_text = font.render(f"Advanced Features: {'Enabled' if CONFIG['advanced_track_generation'] else 'Disabled'}", True, NEON_BLUE)
+                screen.blit(features_text, (20, SCREEN_HEIGHT - 50))
         
         # Game over state
         elif current_state == STATE_GAME_OVER:

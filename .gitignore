@@ -13,7 +13,7 @@ venv/
 env/
 ENV/
 
-# IDE specific files
+# IDE files
 .idea/
 .vscode/
 *.swp
@@ -23,6 +23,6 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# Game specific
-*.log
-highscores.dat
+# Project specific
+amazon_q_config.json
+aws_config.json
