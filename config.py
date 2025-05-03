@@ -21,7 +21,18 @@ CONFIG = {
     "centrifugal_factor": 0.3,     # How much curves pull the car
     "offroad_deceleration": 0.95,  # Speed multiplier when off road
     "night_mode": False,           # Night mode toggle
-    "debug_mode": False            # Debug information toggle
+    "debug_mode": False,           # Debug information toggle
+    
+    # AI-enhanced features
+    "ai_track_generation": True,   # Use AI to generate track patterns
+    "adaptive_difficulty": True,   # Adjust difficulty based on player performance
+    "dynamic_commentary": True,    # Enable AI commentary during gameplay
+    "dynamic_music": False,        # Enable AI-selected music based on gameplay
+    
+    # AI track generation parameters
+    "track_complexity": 0.5,       # 0.0 (simple) to 1.0 (complex)
+    "track_creativity": 0.7,       # 0.0 (standard) to 1.0 (experimental)
+    "track_theme": "synthwave",    # Visual theme for track generation
 }
 
 # Colors
@@ -70,6 +81,30 @@ COLOR_SCHEMES = {
         "lane": LANE_MARKER,
         "car": NEON_BLUE,
         "obstacles": [NEON_PINK, NEON_ORANGE, NEON_PURPLE, NEON_GREEN]
+    },
+    "cyberpunk": {
+        "sky": (5, 10, 20),
+        "ground": (10, 10, 10),
+        "road": (30, 30, 40),
+        "rumble_light": (0, 200, 200),
+        "rumble_dark": (0, 100, 100),
+        "grass_light": (20, 0, 40),
+        "grass_dark": (10, 0, 20),
+        "lane": (0, 255, 255),
+        "car": (0, 255, 200),
+        "obstacles": [(255, 0, 128), (128, 0, 255), (255, 128, 0), (0, 128, 255)]
+    },
+    "retrowave": {
+        "sky": (40, 0, 40),
+        "ground": (20, 0, 20),
+        "road": (60, 0, 60),
+        "rumble_light": (255, 255, 0),
+        "rumble_dark": (200, 200, 0),
+        "grass_light": (100, 0, 100),
+        "grass_dark": (50, 0, 50),
+        "lane": (255, 255, 0),
+        "car": (255, 128, 0),
+        "obstacles": [(0, 255, 255), (255, 0, 255), (255, 255, 0), (128, 255, 0)]
     }
 }
 

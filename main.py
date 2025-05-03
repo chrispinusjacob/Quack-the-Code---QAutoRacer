@@ -1919,7 +1919,8 @@ def main():
             
             # Draw everything
             segment = int(game_state.position / SEGMENT_LENGTH) % len(game_state.track_curvature)
-            draw_road(game_state.position, game_state.player_x, game_state.track_curvature[segment], game_state.hills[segment])
+            dt = clock.get_time()  # Get delta time since last frame
+            draw_road(game_state.position, game_state.player_x, game_state.track_curvature[segment], game_state.hills[segment], dt)
             player_car.draw(0, 0, game_state.speed / game_state.max_speed)
             draw_hud(game_state.speed, game_state.score)
             
