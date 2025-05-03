@@ -1,0 +1,6 @@
+This directory contains sound files for the game:
+- engine.wav: Engine sound effect
+- crash.wav: Crash sound effect
+- score.wav: Score milestone sound effect
+
+You can replace these with your own sound files if desired.
