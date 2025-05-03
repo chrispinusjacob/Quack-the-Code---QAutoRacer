@@ -960,6 +960,14 @@ class Obstacle:
             ]
             pygame.draw.polygon(screen, stripe_color, stripe_points2)
 
+# Import AI integration
+try:
+    from amazon_q_integration import AITrackGenerator, AdaptiveDifficulty, AICommentator, AmazonQIntegration
+    ai_available = True
+except ImportError:
+    print("AI integration not available. Running in standard mode.")
+    ai_available = False
+
 # Game objects
 game_state = GameState()
 player_car = Car()
@@ -967,6 +975,15 @@ obstacles = []
 power_ups = []
 last_obstacle_pos = 0
 last_powerup_pos = 0
+
+# Initialize AI components if available
+if ai_available and CONFIG["ai_track_generation"]:
+    ai_track_generator = AITrackGenerator()
+    if CONFIG["adaptive_difficulty"]:
+        adaptive_difficulty = AdaptiveDifficulty()
+    if CONFIG["dynamic_commentary"]:
+        ai_commentator = AICommentator()
+    aws_integration = AWSIntegration()
 
 # Game effects
 screen_shake = 0
@@ -1095,7 +1112,7 @@ def draw_stars(position):
         pygame.draw.circle(screen, (brightness, brightness, brightness), (int(x), int(y)), size)
 
 # Draw the road with advanced visual effects
-def draw_road(position, player_x, curvature, hill, dt):
+def draw_road(position, player_x, curvature, hill, dt=0):
     # Get color scheme
     colors = get_color_scheme()
     
@@ -1794,12 +1811,51 @@ STATE_GAME_OVER = 2
 
 # Main game loop
 def main():
-    global obstacles, last_obstacle_pos
+    global obstacles, last_obstacle_pos, ai_track_generator, adaptive_difficulty, ai_commentator
     
     game_state = GameState()
     player_car = Car()
     obstacles = []
     last_obstacle_pos = 0
+    
+    # Initialize AI components if available
+    if ai_available:
+        # Check if AWS Builder ID is configured
+        amazon_q = AmazonQIntegration()
+        builder_id_configured = amazon_q.is_configured
+        
+        if not builder_id_configured:
+            print("AWS Builder ID not configured. AI features will be limited.")
+            # Show setup dialog on first run
+            try:
+                from aws_builder_setup import BuilderIDSetupWindow
+                import tkinter as tk
+                root = tk.Tk()
+                root.withdraw()  # Hide the main window
+                setup_window = BuilderIDSetupWindow(root)
+                root.mainloop()
+                # Check if setup was completed
+                amazon_q = AmazonQIntegration()  # Reload config
+                builder_id_configured = amazon_q.is_configured
+            except Exception as e:
+                print(f"Could not show Builder ID setup window: {e}")
+        
+        if CONFIG["ai_track_generation"]:
+            ai_track_generator = AITrackGenerator()
+            # Use AI to generate the track if enabled
+            if hasattr(game_state, 'generate_track'):
+                print("Using AI to generate track...")
+                track_data = ai_track_generator.generate_track(10000, 0.5)
+                game_state.track_curvature = track_data["track_curvature"]
+                game_state.hills = track_data["hills"]
+                game_state.track_width = track_data["track_width"]
+                game_state.track_sprites = track_data["track_sprites"]
+                
+        if CONFIG["adaptive_difficulty"]:
+            adaptive_difficulty = AdaptiveDifficulty()
+            
+        if CONFIG["dynamic_commentary"]:
+            ai_commentator = AICommentator()
     
     # Generate initial obstacles
     for i in range(10):
@@ -1928,6 +1984,11 @@ def main():
             font = pygame.font.SysFont("Arial", 16)
             edu_text = font.render(f"Pseudo-3D Technique: {len(obstacles)} obstacles, {int(game_state.position / SEGMENT_LENGTH)} segments", True, NEON_GREEN)
             screen.blit(edu_text, (20, SCREEN_HEIGHT - 30))
+            
+            # Show AI status if enabled
+            if ai_available:
+                ai_text = font.render(f"AI Features: {'Enabled' if CONFIG['ai_track_generation'] else 'Disabled'}", True, NEON_BLUE)
+                screen.blit(ai_text, (20, SCREEN_HEIGHT - 50))
         
         # Game over state
         elif current_state == STATE_GAME_OVER:
