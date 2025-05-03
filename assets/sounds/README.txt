@@ -1,6 +1,6 @@
-This directory contains sound files for the game:
-- engine.mp3: Engine sound effect
-- crash.mp3: Crash sound effect
-- score.mp3: Score milestone sound effect
+Place sound effect files here:
+- engine.wav: Engine sound effect (looping)
+- crash.wav: Crash sound effect
+- pickup.wav: Orb pickup sound effect
 
-You can replace these with your own sound files if desired.
+If no sound files are provided, the game will create simple placeholder sounds.

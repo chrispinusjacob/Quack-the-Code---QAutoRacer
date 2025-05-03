@@ -39,10 +39,10 @@ Retro Racer '90 is a vertical scrolling racing game inspired by classic arcade g
    ```
 3. Run the game:
    ```
-   python main.py
+   python retro_racer.py
    ```
    
-   Or simply double-click the `run_game.bat` file (Windows)
+   Or simply double-click the `run_retro_racer.bat` file (Windows)
 
 ## How to Play
 
@@ -54,9 +54,9 @@ You can customize the game by adding your own assets:
 
 - **Fonts**: Place a pixel font named "pixel.ttf" in the `assets/fonts` directory
 - **Sounds**: Add sound files to the `assets/sounds` directory:
-  - engine.mp3: Engine sound effect (looping)
-  - crash.mp3: Crash sound effect
-  - score.mp3: Orb pickup sound effect
+  - engine.wav: Engine sound effect (looping)
+  - crash.wav: Crash sound effect
+  - pickup.wav: Orb pickup sound effect
 
 ## Code Structure
 
