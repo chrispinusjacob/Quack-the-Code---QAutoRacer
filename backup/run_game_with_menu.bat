@@ -1,0 +1,6 @@
+@echo off
+echo Running sound fix first...
+python fix_sound_manager.py
+echo Starting QAutoGame '90 with Menu...
+python game_manager.py
+pause

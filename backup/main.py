@@ -13,7 +13,7 @@ pygame.mixer.init()
 SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 600
 FPS = 60
-TITLE = "Retro Racer '90"
+TITLE = "QAutoGame '90"
 
 # Neon 80s color palette
 BLACK = (0, 0, 0)

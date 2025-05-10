@@ -1,75 +1,43 @@
-# Retro Racer '90
+# QAutoGame
 
-A retro-style vertical scrolling racing game with neon 80s aesthetics, created with Python and Pygame.
+A retro-style racing game developed with Python and Pygame.
 
-## Description
+## Copyright
+Copyright 2025 by Chrispinus Jacob  
+Powered by Amazon Q
 
-Retro Racer '90 is a vertical scrolling racing game inspired by classic arcade games from the 90s. Control your pixel-art car, avoid enemy vehicles, and collect glowing orbs to increase your score. The game features a neon 80s color palette, retro fonts, and pixel graphics for an authentic arcade experience.
+## Game Description
+QAutoGame is a retro-style racing game where you control a car and navigate through traffic while collecting orbs to increase your score. The game features multiple difficulty levels, customizable settings, and a high score system.
 
 ## Features
-
-- Vertical scrolling gameplay with pixel-art graphics
-- Player-controlled car that moves left and right
-- Enemy cars that spawn at the top and scroll down
-- Collectible glowing orbs that increase your score
-- Gradually increasing difficulty as time progresses
-- Neon 80s color palette with glowing effects
-- Retro-style sound effects
-- Score and high score tracking
-- Game over screen with restart option
+- Three difficulty levels: Easy, Medium, and Hard
+- Customizable sound and music settings
+- High score tracking
+- Retro-style graphics and sound effects
 
 ## Controls
-
-- **A/Left Arrow**: Move left
-- **D/Right Arrow**: Move right
-- **Space**: Restart after game over
-- **Escape**: Quit game
+- LEFT ARROW / A: Move car left
+- RIGHT ARROW / D: Move car right
+- P or ESC: Pause game
+- SPACE: Restart (when game over)
+- Arrow keys: Navigate menus
+- Enter: Select menu option
 
 ## Requirements
-
 - Python 3.6+
-- Pygame 2.5.2+
+- Pygame 2.0+
 
 ## Installation
+1. Ensure Python is installed on your system
+2. Install required packages: `pip install -r requirements.txt`
+3. Run the game: `python game_manager.py` or double-click `run_final_game.bat`
 
-1. Make sure you have Python installed
-2. Install the required packages:
-   ```
-   pip install -r requirements.txt
-   ```
-3. Run the game:
-   ```
-   python main.py
-   ```
-   
-   Or simply double-click the `run_game.bat` file (Windows)
-
-## How to Play
-
-Control your car (pink) to avoid enemy vehicles while collecting glowing cyan orbs. The game gets progressively more challenging as the speed increases over time. Your score increases based on time survived and orbs collected.
-
-## Customization
-
-You can customize the game by adding your own assets:
-
-- **Fonts**: Place a pixel font named "pixel.ttf" in the `assets/fonts` directory
-- **Sounds**: Add sound files to the `assets/sounds` directory:
-  - engine.mp3: Engine sound effect (looping)
-  - crash.mp3: Crash sound effect
-  - score.mp3: Orb pickup sound effect
-
-## Code Structure
-
-The game is organized with the following classes:
-
-- **Game**: Main game logic and loop
-- **Car**: Player and enemy car objects
-- **Orb**: Collectible orbs that increase score
-
-## Credits
-
-Created as part of the "That's Entertainment!" challenge.
-
-## License
-
-MIT License
+## Files
+- `game_manager.py`: Main entry point for the game
+- `main_menu.py`: Main menu interface
+- `improved_game.py`: Core game logic
+- `settings.py`: Settings menu and configuration
+- `high_scores.py`: High score tracking and display
+- `instructions.py`: Game instructions screen
+- `difficulty_settings.py`: Difficulty level configuration
+- `sound_manager.py`: Audio management

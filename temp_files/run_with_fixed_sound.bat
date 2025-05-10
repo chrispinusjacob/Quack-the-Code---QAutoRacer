@@ -1,0 +1,6 @@
+@echo off
+echo Replacing sound manager with fixed version...
+copy fixed_sound_manager.py sound_manager.py
+echo Starting QAutoGame '90 with fixed sound...
+python game_manager.py
+pause
